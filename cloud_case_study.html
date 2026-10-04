@@ -1,0 +1,1004 @@
+<!DOCTYPE html>
+<html lang="en" class="dark scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cloud Computing Case Study | Kanishka</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                        mono: ['"Fira Code"', 'monospace'],
+                    },
+                    colors: {
+                        obsidian: {
+                            950: '#090D16',
+                            900: '#0F172A',
+                            800: '#1E293B',
+                            700: '#334155',
+                        },
+                        cyanGlow: '#06B6D4',
+                        purpleGlow: '#8B5CF6',
+                    },
+                    animation: {
+                        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'float': 'float 5s ease-in-out infinite',
+                        'glow-pulse': 'glowPulse 3s ease-in-out infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0px)' },
+                            '50%': { transform: 'translateY(-8px)' },
+                        },
+                        glowPulse: {
+                            '0%, 100%': { opacity: '0.4' },
+                            '50%': { opacity: '0.8' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Lucide Icons CDN -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        .bg-grid-pattern {
+            background-size: 40px 40px;
+            background-image: 
+                linear-gradient(to right, rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+        }
+        
+        .light .bg-grid-pattern {
+            background-image: 
+                linear-gradient(to right, rgba(15, 23, 42, 0.05) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(15, 23, 42, 0.05) 1px, transparent 1px);
+        }
+
+        .dark .glass-card {
+            background: rgba(15, 23, 42, 0.7);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .light .glass-card {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(15, 23, 42, 0.08);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
+        }
+
+        .glass-card-hover {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .dark .glass-card-hover:hover {
+            transform: translateY(-4px);
+            border-color: rgba(139, 92, 246, 0.35);
+            box-shadow: 0 12px 35px rgba(139, 92, 246, 0.2), inset 0 0 20px rgba(6, 182, 212, 0.05);
+        }
+
+        .light .glass-card-hover:hover {
+            transform: translateY(-4px);
+            border-color: rgba(37, 99, 235, 0.3);
+            box-shadow: 0 12px 35px rgba(37, 99, 235, 0.12);
+        }
+
+        .dark .glass-input {
+            background: rgba(15, 23, 42, 0.9);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            color: #e2e8f0;
+        }
+
+        .light .glass-input {
+            background: #ffffff;
+            border: 1px solid rgba(15, 23, 42, 0.15);
+            color: #0f172a;
+        }
+
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #090D16;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #334155;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #06B6D4;
+        }
+    </style>
+</head>
+<body class="bg-obsidian-950 dark:bg-obsidian-950 light:bg-slate-50 text-slate-200 dark:text-slate-200 light:text-slate-800 font-sans antialiased min-h-screen selection:bg-cyan-500/30 selection:text-cyan-300 relative overflow-x-hidden transition-colors duration-300">
+
+    <div class="fixed top-0 left-1/4 w-[650px] h-[650px] bg-cyan-500/10 dark:bg-cyan-500/10 light:bg-cyan-500/5 rounded-full blur-[140px] pointer-events-none animate-glow-pulse"></div>
+    <div class="fixed top-1/3 right-10 w-[550px] h-[550px] bg-purple-500/10 dark:bg-purple-500/10 light:bg-purple-500/5 rounded-full blur-[160px] pointer-events-none animate-glow-pulse" style="animation-delay: 1.5s;"></div>
+
+    <div class="fixed inset-0 bg-grid-pattern pointer-events-none z-0"></div>
+
+    <header class="sticky top-0 z-50 backdrop-blur-xl bg-obsidian-950/80 dark:bg-obsidian-950/80 light:bg-white/80 border-b border-white/10 dark:border-white/10 light:border-slate-200 transition-colors">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-cyan-500 via-blue-600 to-purple-600 p-[1px] shadow-lg shadow-cyan-500/20">
+                    <div class="w-full h-full bg-obsidian-950 dark:bg-obsidian-950 light:bg-white rounded-[11px] flex items-center justify-center">
+                        <i data-lucide="cloud-lightning" class="w-5 h-5 text-cyan-400"></i>
+                    </div>
+                </div>
+                <div>
+                    <span class="font-extrabold text-xl tracking-tight bg-gradient-to-r from-cyan-400 via-sky-300 to-purple-500 bg-clip-text text-transparent">
+                        CloudCase
+                    </span>
+                    <span class="text-xs px-2 py-0.5 ml-2 rounded-full bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 font-mono hidden sm:inline-block">
+                        Lab Report
+                    </span>
+                </div>
+            </div>
+
+            <nav class="hidden lg:flex items-center gap-6 text-sm font-semibold text-slate-300 dark:text-slate-300 light:text-slate-600">
+                <a href="#models" class="hover:text-cyan-400 transition-colors flex items-center gap-1.5"><i data-lucide="box" class="w-4 h-4"></i> Models</a>
+                <a href="#cloudsim" class="hover:text-cyan-400 transition-colors flex items-center gap-1.5"><i data-lucide="cpu" class="w-4 h-4"></i> CloudSim (Mod 4)</a>
+                <a href="#vm-transfer" class="hover:text-cyan-400 transition-colors flex items-center gap-1.5"><i data-lucide="arrow-left-right" class="w-4 h-4"></i> VM Transfer (Mod 5)</a>
+                <a href="#architecture" class="hover:text-cyan-400 transition-colors flex items-center gap-1.5"><i data-lucide="layers" class="w-4 h-4"></i> Architecture (Mod 6)</a>
+                <a href="#cost" class="hover:text-cyan-400 transition-colors flex items-center gap-1.5"><i data-lucide="calculator" class="w-4 h-4"></i> Cost Estimator</a>
+                <a href="#compare" class="hover:text-cyan-400 transition-colors flex items-center gap-1.5"><i data-lucide="table" class="w-4 h-4"></i> Compare</a>
+            </nav>
+
+            <div class="flex items-center gap-3">
+                <button id="theme-toggle" onclick="toggleTheme()" class="px-3 py-2 rounded-xl text-xs font-bold glass-card hover:bg-white/10 dark:hover:bg-white/10 light:hover:bg-slate-200 text-slate-200 dark:text-slate-200 light:text-slate-700 flex items-center gap-1.5 transition-all">
+                    <span id="theme-icon"><i data-lucide="moon" class="w-4 h-4 text-purple-400"></i></span>
+                    <span id="theme-text">Dark</span>
+                </button>
+
+                <a href="#cloudsim" class="px-4 py-2.5 rounded-xl text-xs font-bold bg-gradient-to-r from-cyan-500 to-purple-600 hover:from-cyan-400 hover:to-purple-500 text-white shadow-lg shadow-cyan-500/25 transition-all hover:scale-105 active:scale-95 flex items-center gap-2">
+                    <i data-lucide="play-circle" class="w-4 h-4"></i> Launch Sim
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-24">
+
+        <section id="hero" class="relative pt-8 pb-12 text-center space-y-8">
+            <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass-card border-cyan-500/30 text-cyan-300 dark:text-cyan-300 light:text-cyan-700 text-xs font-semibold shadow-lg shadow-cyan-500/10">
+                <span class="w-2 h-2 rounded-full bg-cyan-400 animate-ping"></span>
+                <span>Cloud Computing Case Study | Kanishka</span>
+            </div>
+
+            <h1 class="text-4xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight leading-tight max-w-5xl mx-auto text-white dark:text-white light:text-slate-900">
+                Cloud Computing Case Study & <br class="hidden sm:block"/>
+                <span class="bg-gradient-to-r from-cyan-400 via-sky-300 to-purple-500 bg-clip-text text-transparent">
+                    Modern Web Application Architecture
+                </span>
+            </h1>
+
+            <p class="max-w-3xl mx-auto text-base sm:text-lg text-slate-400 dark:text-slate-400 light:text-slate-600 font-normal leading-relaxed">
+                How a web application goes live on the internet using <span class="text-cyan-400 font-semibold">GitHub Pages</span>, <span class="text-purple-400 font-semibold">AWS EC2</span>, and <span class="text-emerald-400 font-semibold">CloudSim scenario simulations</span> — without owning physical servers.
+            </p>
+
+            <div class="flex flex-wrap justify-center items-center gap-2.5 pt-2">
+                <span class="px-3.5 py-1.5 rounded-full glass-card text-xs font-mono font-medium text-cyan-300 dark:text-cyan-300 light:text-cyan-700 border-cyan-500/20">GitHub Pages</span>
+                <span class="px-3.5 py-1.5 rounded-full glass-card text-xs font-mono font-medium text-purple-300 dark:text-purple-300 light:text-purple-700 border-purple-500/20">AWS EC2</span>
+                <span class="px-3.5 py-1.5 rounded-full glass-card text-xs font-mono font-medium text-emerald-300 dark:text-emerald-300 light:text-emerald-700 border-emerald-500/20">Nginx Web Server</span>
+                <span class="px-3.5 py-1.5 rounded-full glass-card text-xs font-mono font-medium text-amber-300 dark:text-amber-300 light:text-amber-700 border-amber-500/20">CloudSim 4.0</span>
+                <span class="px-3.5 py-1.5 rounded-full glass-card text-xs font-mono font-medium text-sky-300 dark:text-sky-300 light:text-sky-700 border-sky-500/20">VMware / Oracle VM</span>
+            </div>
+
+            <div class="flex flex-wrap justify-center items-center gap-4 pt-4">
+                <a href="#architecture" class="px-6 py-3.5 rounded-xl font-bold text-sm bg-gradient-to-r from-cyan-500 to-purple-600 hover:from-cyan-400 hover:to-purple-500 text-white shadow-xl shadow-cyan-500/25 hover:shadow-cyan-500/40 transition-all hover:-translate-y-0.5 active:translate-y-0 flex items-center gap-2">
+                    <i data-lucide="eye" class="w-4 h-4"></i> View Architecture
+                </a>
+                <a href="#cost" class="px-6 py-3.5 rounded-xl font-bold text-sm glass-card hover:bg-white/10 dark:hover:bg-white/10 light:hover:bg-slate-200 text-slate-200 dark:text-slate-200 light:text-slate-800 transition-all hover:-translate-y-0.5 active:translate-y-0 flex items-center gap-2 border-white/15">
+                    <i data-lucide="calculator" class="w-4 h-4 text-cyan-400"></i> Try Cost Estimator
+                </a>
+            </div>
+
+            <div class="pt-8">
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4 glass-card p-6 rounded-2xl max-w-4xl mx-auto shadow-2xl">
+                    <div class="text-center border-r border-white/10 dark:border-white/10 light:border-slate-200 last:border-0">
+                        <div class="text-2xl sm:text-3xl font-extrabold text-emerald-400 font-mono">99.99%</div>
+                        <div class="text-xs text-slate-400 font-medium mt-1 uppercase tracking-wider flex items-center justify-center gap-1">
+                            <i data-lucide="shield-check" class="w-3.5 h-3.5 text-emerald-400"></i> Uptime SLA
+                        </div>
+                    </div>
+                    <div class="text-center border-r border-white/10 dark:border-white/10 light:border-slate-200 last:border-0">
+                        <div class="text-2xl sm:text-3xl font-extrabold text-cyan-400 font-mono">&lt;42ms</div>
+                        <div class="text-xs text-slate-400 font-medium mt-1 uppercase tracking-wider flex items-center justify-center gap-1">
+                            <i data-lucide="zap" class="w-3.5 h-3.5 text-cyan-400"></i> Global Latency
+                        </div>
+                    </div>
+                    <div class="text-center border-r border-white/10 dark:border-white/10 light:border-slate-200 last:border-0">
+                        <div class="text-2xl sm:text-3xl font-extrabold text-purple-400 font-mono">AWS / GCP</div>
+                        <div class="text-xs text-slate-400 font-medium mt-1 uppercase tracking-wider flex items-center justify-center gap-1">
+                            <i data-lucide="cloud" class="w-3.5 h-3.5 text-purple-400"></i> Multi-Cloud
+                        </div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-2xl sm:text-3xl font-extrabold text-emerald-400 font-mono">PASSED</div>
+                        <div class="text-xs text-slate-400 font-medium mt-1 uppercase tracking-wider flex items-center justify-center gap-1">
+                            <i data-lucide="check-circle-2" class="w-3.5 h-3.5 text-emerald-400"></i> CI/CD Build
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="models" class="space-y-8">
+            <div class="border-b border-white/10 dark:border-white/10 light:border-slate-200 pb-4">
+                <h2 class="text-3xl font-extrabold text-white dark:text-white light:text-slate-900 tracking-tight">
+                    Cloud Service Models
+                </h2>
+                <p class="text-slate-400 dark:text-slate-400 light:text-slate-600 text-sm mt-1">
+                    Who manages what? The more the cloud provider manages, the less infrastructure overhead for developers.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="glass-card glass-card-hover p-6 rounded-2xl space-y-4 flex flex-col justify-between">
+                    <div class="space-y-3">
+                        <div class="w-12 h-12 rounded-2xl bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center text-cyan-400">
+                            <i data-lucide="server" class="w-6 h-6"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-white dark:text-white light:text-slate-900">IaaS (Infrastructure)</h3>
+                        <p class="text-xs text-slate-400 dark:text-slate-400 light:text-slate-600 leading-relaxed">
+                            Virtual machines, raw storage, and networks on rent. You install and manage the operating system, Nginx server, and application stack.
+                        </p>
+                        <div class="flex gap-2 font-mono text-[11px]">
+                            <span class="px-2 py-0.5 rounded bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">AWS EC2</span>
+                            <span class="px-2 py-0.5 rounded bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">GCP Compute</span>
+                        </div>
+                    </div>
+                    <div class="space-y-1.5 pt-4 border-t border-white/10 dark:border-white/10 light:border-slate-200">
+                        <div class="flex justify-between text-xs font-mono font-medium">
+                            <span class="text-slate-400">Provider Manages</span>
+                            <span class="text-cyan-400">~30%</span>
+                        </div>
+                        <div class="w-full h-2 rounded-full bg-obsidian-800 dark:bg-obsidian-800 light:bg-slate-200 overflow-hidden">
+                            <div class="h-full bg-cyan-400 rounded-full w-[30%]"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="glass-card glass-card-hover p-6 rounded-2xl space-y-4 flex flex-col justify-between">
+                    <div class="space-y-3">
+                        <div class="w-12 h-12 rounded-2xl bg-purple-500/10 border border-purple-500/20 flex items-center justify-center text-purple-400">
+                            <i data-lucide="rocket" class="w-6 h-6"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-white dark:text-white light:text-slate-900">PaaS (Platform)</h3>
+                        <p class="text-xs text-slate-400 dark:text-slate-400 light:text-slate-600 leading-relaxed">
+                            A ready platform to run your code directly. The cloud provider handles OS updates, scaling, load balancing, and security patches automatically.
+                        </p>
+                        <div class="flex gap-2 font-mono text-[11px]">
+                            <span class="px-2 py-0.5 rounded bg-purple-500/10 text-purple-400 border border-purple-500/20">GitHub Pages</span>
+                            <span class="px-2 py-0.5 rounded bg-purple-500/10 text-purple-400 border border-purple-500/20">App Engine</span>
+                        </div>
+                    </div>
+                    <div class="space-y-1.5 pt-4 border-t border-white/10 dark:border-white/10 light:border-slate-200">
+                        <div class="flex justify-between text-xs font-mono font-medium">
+                            <span class="text-slate-400">Provider Manages</span>
+                            <span class="text-purple-400">~70%</span>
+                        </div>
+                        <div class="w-full h-2 rounded-full bg-obsidian-800 dark:bg-obsidian-800 light:bg-slate-200 overflow-hidden">
+                            <div class="h-full bg-purple-500 rounded-full w-[70%]"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="glass-card glass-card-hover p-6 rounded-2xl space-y-4 flex flex-col justify-between">
+                    <div class="space-y-3">
+                        <div class="w-12 h-12 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400">
+                            <i data-lucide="globe" class="w-6 h-6"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-white dark:text-white light:text-slate-900">SaaS (Software)</h3>
+                        <p class="text-xs text-slate-400 dark:text-slate-400 light:text-slate-600 leading-relaxed">
+                            Complete software delivered entirely through a web browser. Zero installation, zero infrastructure configuration, or maintenance.
+                        </p>
+                        <div class="flex gap-2 font-mono text-[11px]">
+                            <span class="px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">Gmail</span>
+                            <span class="px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">Google Docs</span>
+                        </div>
+                    </div>
+                    <div class="space-y-1.5 pt-4 border-t border-white/10 dark:border-white/10 light:border-slate-200">
+                        <div class="flex justify-between text-xs font-mono font-medium">
+                            <span class="text-slate-400">Provider Manages</span>
+                            <span class="text-emerald-400">100%</span>
+                        </div>
+                        <div class="w-full h-2 rounded-full bg-obsidian-800 dark:bg-obsidian-800 light:bg-slate-200 overflow-hidden">
+                            <div class="h-full bg-emerald-400 rounded-full w-[100%]"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="cloudsim" class="space-y-8">
+            <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-white/10 dark:border-white/10 light:border-slate-200 pb-4">
+                <div>
+                    <div class="flex items-center gap-2 text-cyan-400 font-mono text-xs font-bold uppercase tracking-wider mb-2">
+                        <span class="px-2 py-0.5 rounded bg-cyan-500/10 border border-cyan-500/20">Module 4</span>
+                        CloudSim Framework
+                    </div>
+                    <h2 class="text-3xl font-extrabold text-white dark:text-white light:text-slate-900 tracking-tight">
+                        Cloud Scenario Simulation & Workload Emulation
+                    </h2>
+                </div>
+                <p class="text-slate-400 text-xs max-w-md">
+                    Modeled after CloudSim Java Toolkit for virtualized Datacenter resource allocation and MIPS task scheduling.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                <div class="lg:col-span-5 glass-card glass-card-hover p-6 rounded-2xl space-y-6">
+                    <div class="flex items-center justify-between">
+                        <h3 class="text-lg font-bold text-white dark:text-white light:text-slate-900 flex items-center gap-2">
+                            <i data-lucide="sliders" class="w-5 h-5 text-cyan-400"></i> Simulation Parameters
+                        </h3>
+                        <span class="text-xs font-mono text-cyan-400 bg-cyan-500/10 px-2 py-1 rounded">Interactive</span>
+                    </div>
+
+                    <div class="space-y-5 text-sm">
+                        <div class="space-y-2">
+                            <div class="flex justify-between text-xs font-semibold">
+                                <span class="text-slate-300 dark:text-slate-300 light:text-slate-700">Datacenters Provisioned</span>
+                                <span id="dc-val" class="font-mono text-cyan-400">2 Regions</span>
+                            </div>
+                            <input type="range" id="dc-slider" min="1" max="8" value="2" class="w-full h-2 bg-obsidian-800 dark:bg-obsidian-800 light:bg-slate-200 rounded-lg appearance-none cursor-pointer accent-cyan-400">
+                        </div>
+
+                        <div class="space-y-2">
+                            <div class="flex justify-between text-xs font-semibold">
+                                <span class="text-slate-300 dark:text-slate-300 light:text-slate-700">Virtual Machine Instances (VMs)</span>
+                                <span id="vm-val" class="font-mono text-purple-400">16 VMs</span>
+                            </div>
+                            <input type="range" id="vm-slider" min="4" max="64" value="16" class="w-full h-2 bg-obsidian-800 dark:bg-obsidian-800 light:bg-slate-200 rounded-lg appearance-none cursor-pointer accent-purple-400">
+                        </div>
+
+                        <div class="space-y-2">
+                            <div class="flex justify-between text-xs font-semibold">
+                                <span class="text-slate-300 dark:text-slate-300 light:text-slate-700">Cloudlet Workload Requests</span>
+                                <span id="cloudlet-val" class="font-mono text-amber-400">50 Cloudlets</span>
+                            </div>
+                            <input type="range" id="cloudlet-slider" min="10" max="200" value="50" class="w-full h-2 bg-obsidian-800 dark:bg-obsidian-800 light:bg-slate-200 rounded-lg appearance-none cursor-pointer accent-amber-400">
+                        </div>
+
+                        <div class="space-y-2">
+                            <label class="text-xs font-semibold text-slate-300 dark:text-slate-300 light:text-slate-700">VM Scheduling Policy</label>
+                            <select id="policy-select" class="w-full glass-input px-3 py-2.5 rounded-xl text-xs focus:outline-none font-mono">
+                                <option value="TimeShared">TimeShared (Round-Robin Allocation)</option>
+                                <option value="SpaceShared">SpaceShared (First-Come-First-Served)</option>
+                                <option value="DynamicPriority">Dynamic Load-Balanced (Greedy MIPS)</option>
+                            </select>
+                        </div>
+
+                        <button id="run-sim-btn" class="w-full py-3 rounded-xl bg-gradient-to-r from-cyan-500 to-purple-600 hover:from-cyan-400 hover:to-purple-500 text-white font-bold text-sm shadow-lg shadow-cyan-500/20 transition-all active:scale-[0.98] flex items-center justify-center gap-2">
+                            <i data-lucide="play" class="w-4 h-4"></i> Execute CloudSim Scenario
+                        </button>
+                    </div>
+                </div>
+
+                <div class="lg:col-span-7 glass-card p-6 rounded-2xl flex flex-col justify-between space-y-6">
+                    <div class="flex items-center justify-between border-b border-white/10 dark:border-white/10 light:border-slate-200 pb-4">
+                        <h3 class="text-lg font-bold text-white dark:text-white light:text-slate-900 flex items-center gap-2">
+                            <i data-lucide="terminal" class="w-5 h-5 text-purple-400"></i> CloudSim Runtime Console
+                        </h3>
+                        <div class="flex items-center gap-2">
+                            <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                            <span id="sim-status-text" class="text-xs font-mono text-emerald-400">Engine Idle</span>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-3 gap-4 text-center">
+                        <div class="p-3 rounded-xl bg-obsidian-950/60 dark:bg-obsidian-950/60 light:bg-slate-100 border border-white/5 dark:border-white/5 light:border-slate-200">
+                            <div class="text-xs text-slate-400">Avg Execution Time</div>
+                            <div id="sim-time" class="text-lg font-bold font-mono text-cyan-400 mt-1">124.5 ms</div>
+                        </div>
+                        <div class="p-3 rounded-xl bg-obsidian-950/60 dark:bg-obsidian-950/60 light:bg-slate-100 border border-white/5 dark:border-white/5 light:border-slate-200">
+                            <div class="text-xs text-slate-400">Total Host MIPS</div>
+                            <div id="sim-mips" class="text-lg font-bold font-mono text-purple-400 mt-1">32,000</div>
+                        </div>
+                        <div class="p-3 rounded-xl bg-obsidian-950/60 dark:bg-obsidian-950/60 light:bg-slate-100 border border-white/5 dark:border-white/5 light:border-slate-200">
+                            <div class="text-xs text-slate-400">Bandwidth Utilized</div>
+                            <div id="sim-bw" class="text-lg font-bold font-mono text-emerald-400 mt-1">4.2 Gbps</div>
+                        </div>
+                    </div>
+
+                    <div class="bg-obsidian-950/90 dark:bg-obsidian-950/90 light:bg-slate-900 rounded-xl p-4 border border-white/10 font-mono text-xs space-y-1.5 h-48 overflow-y-auto text-slate-300" id="terminal-logs">
+                        <div class="text-slate-500">[System Initialization] CloudSim v4.0 Java core loaded.</div>
+                        <div class="text-cyan-400">[Datacenter 0] Provisioned 2 Host Nodes (RAM: 16GB, Storage: 1TB).</div>
+                        <div class="text-purple-400">[Datacenter 1] Provisioned 8 VMs with TimeShared scheduling policy.</div>
+                        <div class="text-emerald-400">[Cloudlet Broker] Submitted 50 workload tasks to scheduler queue.</div>
+                        <div class="text-slate-400">&gt; Ready for simulation execution click...</div>
+                    </div>
+
+                    <div class="text-xs text-slate-400 flex items-center justify-between font-mono pt-1">
+                        <span>Config Ready</span>
+                        <span>Memory: 256MB Java Heap</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="vm-transfer" class="space-y-8">
+            <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-white/10 dark:border-white/10 light:border-slate-200 pb-4">
+                <div>
+                    <div class="flex items-center gap-2 text-purple-400 font-mono text-xs font-bold uppercase tracking-wider mb-2">
+                        <span class="px-2 py-0.5 rounded bg-purple-500/10 border border-purple-500/20">Module 5</span>
+                        Networking & Data Migration
+                    </div>
+                    <h2 class="text-3xl font-extrabold text-white dark:text-white light:text-slate-900 tracking-tight">
+                        Virtual Machine File Transfer Architecture
+                    </h2>
+                </div>
+                <div class="flex items-center p-1 bg-obsidian-900 dark:bg-obsidian-900 light:bg-slate-200 border border-white/10 dark:border-white/10 light:border-slate-300 rounded-xl">
+                    <button id="btn-oracle-mode" onclick="switchVMTab('oracle')" class="px-4 py-2 rounded-lg text-xs font-bold transition-all bg-cyan-500 text-obsidian-950 shadow-md">
+                        Oracle VM / VMware Setup
+                    </button>
+                    <button id="btn-aws-mode" onclick="switchVMTab('aws')" class="px-4 py-2 rounded-lg text-xs font-bold text-slate-400 dark:text-slate-400 light:text-slate-700 hover:text-white transition-all">
+                        AWS EC2 (EC2-1 ↔ EC2-2)
+                    </button>
+                </div>
+            </div>
+
+            <div id="tab-oracle" class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+                <div class="lg:col-span-7 glass-card p-6 rounded-2xl space-y-6">
+                    <div class="flex justify-between items-center border-b border-white/10 dark:border-white/10 light:border-slate-200 pb-3">
+                        <span class="text-xs font-mono text-cyan-400 font-semibold flex items-center gap-2">
+                            <i data-lucide="hard-drive" class="w-4 h-4"></i> Local Hypervisor File Exchange Flow
+                        </span>
+                        <span class="text-xs bg-cyan-500/10 text-cyan-400 px-2 py-0.5 rounded border border-cyan-500/20">Host-Only Network</span>
+                    </div>
+
+                    <div class="relative py-8 flex items-center justify-between px-4 sm:px-8 bg-obsidian-950/70 dark:bg-obsidian-950/70 light:bg-slate-100 rounded-xl border border-white/5">
+                        <div class="flex flex-col items-center space-y-2 z-10">
+                            <div class="w-16 h-16 rounded-2xl bg-cyan-500/20 border border-cyan-400/40 flex items-center justify-center shadow-lg">
+                                <i data-lucide="monitor" class="w-8 h-8 text-cyan-400"></i>
+                            </div>
+                            <span class="font-bold text-xs text-white dark:text-white light:text-slate-900">VM 1 (Host)</span>
+                            <span class="text-[11px] font-mono text-cyan-400 bg-cyan-950/60 px-2 py-0.5 rounded">192.168.56.101</span>
+                        </div>
+
+                        <div class="flex-1 px-4 flex flex-col items-center space-y-2">
+                            <div class="w-full flex items-center justify-center relative">
+                                <div class="w-full h-0.5 bg-gradient-to-r from-cyan-500 via-purple-500 to-cyan-500"></div>
+                                <div class="absolute inset-0 flex items-center justify-center">
+                                    <div class="px-3 py-1 rounded-full bg-purple-600 text-white text-[10px] font-mono font-bold flex items-center gap-1 shadow-lg animate-pulse">
+                                        <i data-lucide="arrow-left-right" class="w-3 h-3"></i> SCP / SFTP / Shared Folders
+                                    </div>
+                                </div>
+                            </div>
+                            <span class="text-[11px] text-slate-400 font-mono">SSH Port 22 Tunnel</span>
+                        </div>
+
+                        <div class="flex flex-col items-center space-y-2 z-10">
+                            <div class="w-16 h-16 rounded-2xl bg-purple-500/20 border border-purple-400/40 flex items-center justify-center shadow-lg">
+                                <i data-lucide="server" class="w-8 h-8 text-purple-400"></i>
+                            </div>
+                            <span class="font-bold text-xs text-white dark:text-white light:text-slate-900">VM 2 (Guest)</span>
+                            <span class="text-[11px] font-mono text-purple-400 bg-purple-950/60 px-2 py-0.5 rounded">192.168.56.102</span>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
+                        <div class="p-3 rounded-xl bg-white/5 dark:bg-white/5 light:bg-slate-100 border border-white/5">
+                            <div class="font-bold text-cyan-300 dark:text-cyan-300 light:text-cyan-700 mb-1">1. Host Network</div>
+                            <p class="text-slate-400">VirtualBox Host-Only Adapter for internal VM-to-VM IP routing.</p>
+                        </div>
+                        <div class="p-3 rounded-xl bg-white/5 dark:bg-white/5 light:bg-slate-100 border border-white/5">
+                            <div class="font-bold text-purple-300 dark:text-purple-300 light:text-purple-700 mb-1">2. Guest Additions</div>
+                            <p class="text-slate-400">Install VirtualBox additions to enable shared folder automount.</p>
+                        </div>
+                        <div class="p-3 rounded-xl bg-white/5 dark:bg-white/5 light:bg-slate-100 border border-white/5">
+                            <div class="font-bold text-emerald-300 dark:text-emerald-300 light:text-emerald-700 mb-1">3. SFTP Execution</div>
+                            <p class="text-slate-400">Use CLI <code class="font-mono text-[10px]">scp file user@192.168.56.102:/var/data/</code>.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="lg:col-span-5 glass-card glass-card-hover p-6 rounded-2xl space-y-4">
+                    <h3 class="text-lg font-bold text-white dark:text-white light:text-slate-900 flex items-center gap-2">
+                        <i data-lucide="check-square" class="w-5 h-5 text-cyan-400"></i> Hypervisor Specs
+                    </h3>
+                    <ul class="space-y-3 text-sm text-slate-300 dark:text-slate-300 light:text-slate-700">
+                        <li class="flex items-start gap-2.5">
+                            <i data-lucide="chevron-right" class="w-4 h-4 text-cyan-400 shrink-0 mt-0.5"></i>
+                            <span><strong class="text-white dark:text-white light:text-slate-900">Virtual Adapter:</strong> Set Mode to <em>Host-Only Adapter</em> in VirtualBox network settings.</span>
+                        </li>
+                        <li class="flex items-start gap-2.5">
+                            <i data-lucide="chevron-right" class="w-4 h-4 text-cyan-400 shrink-0 mt-0.5"></i>
+                            <span><strong class="text-white dark:text-white light:text-slate-900">Shared Folders:</strong> Automount directory <code class="text-xs font-mono text-cyan-300 bg-obsidian-950 px-1.5 py-0.5 rounded">/media/sf_Shared</code>.</span>
+                        </li>
+                        <li class="flex items-start gap-2.5">
+                            <i data-lucide="chevron-right" class="w-4 h-4 text-cyan-400 shrink-0 mt-0.5"></i>
+                            <span><strong class="text-white dark:text-white light:text-slate-900">SSH Protocol:</strong> Enable <code class="text-xs font-mono text-cyan-300 bg-obsidian-950 px-1.5 py-0.5 rounded">sshd</code> daemon on guest Linux VM.</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div id="tab-aws" class="hidden grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+                <div class="lg:col-span-7 glass-card p-6 rounded-2xl space-y-6">
+                    <div class="flex justify-between items-center border-b border-white/10 dark:border-white/10 light:border-slate-200 pb-3">
+                        <span class="text-xs font-mono text-purple-400 font-semibold flex items-center gap-2">
+                            <i data-lucide="cloud-cog" class="w-4 h-4"></i> AWS VPC Inter-Instance Data Transfer
+                        </span>
+                        <span class="text-xs bg-purple-500/10 text-purple-400 px-2 py-0.5 rounded border border-purple-500/20">Security Group / VPC Peering</span>
+                    </div>
+
+                    <div class="relative py-8 flex items-center justify-between px-4 sm:px-8 bg-obsidian-950/70 dark:bg-obsidian-950/70 light:bg-slate-100 rounded-xl border border-white/5">
+                        <div class="flex flex-col items-center space-y-2 z-10">
+                            <div class="w-16 h-16 rounded-2xl bg-amber-500/20 border border-amber-400/40 flex items-center justify-center shadow-lg">
+                                <i data-lucide="cpu" class="w-8 h-8 text-amber-400"></i>
+                            </div>
+                            <span class="font-bold text-xs text-white dark:text-white light:text-slate-900">EC2-1 (us-east-1a)</span>
+                            <span class="text-[11px] font-mono text-amber-400 bg-amber-950/60 px-2 py-0.5 rounded">10.0.1.42</span>
+                        </div>
+
+                        <div class="flex-1 px-4 flex flex-col items-center space-y-2">
+                            <div class="w-full flex items-center justify-center relative">
+                                <div class="w-full h-0.5 bg-gradient-to-r from-amber-500 via-purple-500 to-sky-500"></div>
+                                <div class="absolute inset-0 flex items-center justify-center">
+                                    <div class="px-3 py-1 rounded-full bg-amber-600 text-white text-[10px] font-mono font-bold flex items-center gap-1 shadow-lg animate-pulse">
+                                        <i data-lucide="database" class="w-3 h-3"></i> AWS S3 / Direct SCP (PEM Key)
+                                    </div>
+                                </div>
+                            </div>
+                            <span class="text-[11px] text-slate-400 font-mono">10Gbps AWS Internal Network</span>
+                        </div>
+
+                        <div class="flex flex-col items-center space-y-2 z-10">
+                            <div class="w-16 h-16 rounded-2xl bg-sky-500/20 border border-sky-400/40 flex items-center justify-center shadow-lg">
+                                <i data-lucide="server" class="w-8 h-8 text-sky-400"></i>
+                            </div>
+                            <span class="font-bold text-xs text-white dark:text-white light:text-slate-900">EC2-2 (us-east-1b)</span>
+                            <span class="text-[11px] font-mono text-sky-400 bg-sky-950/60 px-2 py-0.5 rounded">10.0.2.88</span>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
+                        <div class="p-3 rounded-xl bg-white/5 dark:bg-white/5 light:bg-slate-100 border border-white/5">
+                            <div class="font-bold text-amber-300 dark:text-amber-300 light:text-amber-700 mb-1">Direct SCP</div>
+                            <p class="text-slate-400">Copy <code class="text-[10px] font-mono">key.pem</code> to EC2-1 and execute SCP over VPC private IPs.</p>
+                        </div>
+                        <div class="p-3 rounded-xl bg-white/5 dark:bg-white/5 light:bg-slate-100 border border-white/5">
+                            <div class="font-bold text-purple-300 dark:text-purple-300 light:text-purple-700 mb-1">AWS S3 Bucket</div>
+                            <p class="text-slate-400">Sync with <code class="text-[10px] font-mono">aws s3 cp</code> bucket & fetch on EC2-2 with IAM Role.</p>
+                        </div>
+                        <div class="p-3 rounded-xl bg-white/5 dark:bg-white/5 light:bg-slate-100 border border-white/5">
+                            <div class="font-bold text-sky-300 dark:text-sky-300 light:text-sky-700 mb-1">Security Groups</div>
+                            <p class="text-slate-400">Authorize Inbound SSH (Port 22) from EC2-1 Security Group ID.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="lg:col-span-5 glass-card glass-card-hover p-6 rounded-2xl space-y-4">
+                    <h3 class="text-lg font-bold text-white dark:text-white light:text-slate-900 flex items-center gap-2">
+                        <i data-lucide="cloud-lightning" class="w-5 h-5 text-purple-400"></i> Cloud Specs
+                    </h3>
+                    <ul class="space-y-3 text-sm text-slate-300 dark:text-slate-300 light:text-slate-700">
+                        <li class="flex items-start gap-2.5">
+                            <i data-lucide="chevron-right" class="w-4 h-4 text-purple-400 shrink-0 mt-0.5"></i>
+                            <span><strong class="text-white dark:text-white light:text-slate-900">IAM Roles:</strong> Attach <code class="text-xs font-mono text-purple-300 bg-obsidian-950 px-1.5 py-0.5 rounded">AmazonS3FullAccess</code> instance profiles.</span>
+                        </li>
+                        <li class="flex items-start gap-2.5">
+                            <i data-lucide="chevron-right" class="w-4 h-4 text-purple-400 shrink-0 mt-0.5"></i>
+                            <span><strong class="text-white dark:text-white light:text-slate-900">VPC Endpoint:</strong> Low-latency internal gateway endpoint without internet gateway charges.</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section id="architecture" class="space-y-12">
+            <div class="border-b border-white/10 dark:border-white/10 light:border-slate-200 pb-4">
+                <div class="flex items-center gap-2 text-emerald-400 font-mono text-xs font-bold uppercase tracking-wider mb-2">
+                    <span class="px-2 py-0.5 rounded bg-emerald-500/10 border border-emerald-500/20">Module 6</span>
+                    Case Study & Infrastructure
+                </div>
+                <h2 class="text-3xl font-extrabold text-white dark:text-white light:text-slate-900 tracking-tight">
+                    Architecture & Deployment Pipeline
+                </h2>
+                <p class="text-slate-400 dark:text-slate-400 light:text-slate-600 text-sm mt-1">
+                    The end-to-end journey of this web application from developer laptop to production cloud deployment.
+                </p>
+            </div>
+
+            <div class="glass-card p-6 sm:p-8 rounded-2xl space-y-6">
+                <h3 class="text-lg font-bold text-white dark:text-white light:text-slate-900 flex items-center gap-2">
+                    <i data-lucide="git-merge" class="w-5 h-5 text-cyan-400"></i> System Traffic & Infrastructure Diagram
+                </h3>
+
+                <div class="space-y-2">
+                    <span class="text-xs font-mono text-cyan-400 font-bold uppercase">Path A: Static Hosting (GitHub Pages)</span>
+                    <div class="grid grid-cols-1 sm:grid-cols-4 gap-4 text-center">
+                        <div class="p-4 rounded-xl bg-obsidian-950/80 dark:bg-obsidian-950/80 light:bg-slate-100 border border-cyan-500/30">
+                            <div class="font-bold text-xs text-white dark:text-white light:text-slate-900">Developer</div>
+                            <div class="text-[11px] font-mono text-slate-400">index.html</div>
+                        </div>
+                        <div class="p-4 rounded-xl bg-obsidian-950/80 dark:bg-obsidian-950/80 light:bg-slate-100 border border-cyan-500/30">
+                            <div class="font-bold text-xs text-white dark:text-white light:text-slate-900">GitHub Repo</div>
+                            <div class="text-[11px] font-mono text-slate-400">git push main</div>
+                        </div>
+                        <div class="p-4 rounded-xl bg-obsidian-950/80 dark:bg-obsidian-950/80 light:bg-slate-100 border border-cyan-500/30">
+                            <div class="font-bold text-xs text-white dark:text-white light:text-slate-900">GitHub Pages</div>
+                            <div class="text-[11px] font-mono text-slate-400">Cloud Server + CDN</div>
+                        </div>
+                        <div class="p-4 rounded-xl bg-cyan-500/10 border border-cyan-400 text-cyan-400">
+                            <div class="font-bold text-xs">User Browser</div>
+                            <div class="text-[11px] font-mono">HTTPS Live</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="space-y-2 pt-4 border-t border-white/10 dark:border-white/10 light:border-slate-200">
+                    <span class="text-xs font-mono text-purple-400 font-bold uppercase">Path B: Virtual Machine Cloud Deployment (AWS EC2 / GCP)</span>
+                    <div class="grid grid-cols-1 sm:grid-cols-4 gap-4 text-center">
+                        <div class="p-4 rounded-xl bg-obsidian-950/80 dark:bg-obsidian-950/80 light:bg-slate-100 border border-purple-500/30">
+                            <div class="font-bold text-xs text-white dark:text-white light:text-slate-900">Developer</div>
+                            <div class="text-[11px] font-mono text-slate-400">SSH / Git Action</div>
+                        </div>
+                        <div class="p-4 rounded-xl bg-obsidian-950/80 dark:bg-obsidian-950/80 light:bg-slate-100 border border-purple-500/30">
+                            <div class="font-bold text-xs text-white dark:text-white light:text-slate-900">AWS EC2</div>
+                            <div class="text-[11px] font-mono text-slate-400">Ubuntu + Nginx</div>
+                        </div>
+                        <div class="p-4 rounded-xl bg-obsidian-950/80 dark:bg-obsidian-950/80 light:bg-slate-100 border border-purple-500/30">
+                            <div class="font-bold text-xs text-white dark:text-white light:text-slate-900">Security Group</div>
+                            <div class="text-[11px] font-mono text-slate-400">HTTP Port 80 Open</div>
+                        </div>
+                        <div class="p-4 rounded-xl bg-purple-500/10 border border-purple-400 text-purple-400">
+                            <div class="font-bold text-xs">User Browser</div>
+                            <div class="text-[11px] font-mono">Elastic IP</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="space-y-6">
+                <h3 class="text-xl font-bold text-white dark:text-white light:text-slate-900">
+                    Deployment Steps
+                </h3>
+                <p class="text-xs text-slate-400">Step-by-step workflow completed to publish this web application.</p>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="glass-card p-4 rounded-xl flex items-start gap-3">
+                        <span class="w-7 h-7 rounded-full bg-cyan-500 text-obsidian-950 font-bold flex items-center justify-center text-xs shrink-0 mt-0.5">1</span>
+                        <div>
+                            <div class="font-bold text-sm text-white dark:text-white light:text-slate-900">Write the Page</div>
+                            <div class="text-xs text-slate-400">One single-file <code class="font-mono text-cyan-300">index.html</code> combining structure, Tailwind CSS styling, and JavaScript logic.</div>
+                        </div>
+                    </div>
+
+                    <div class="glass-card p-4 rounded-xl flex items-start gap-3">
+                        <span class="w-7 h-7 rounded-full bg-cyan-500 text-obsidian-950 font-bold flex items-center justify-center text-xs shrink-0 mt-0.5">2</span>
+                        <div>
+                            <div class="font-bold text-sm text-white dark:text-white light:text-slate-900">Create GitHub Repository</div>
+                            <div class="text-xs text-slate-400">A public repository named <code class="font-mono text-cyan-300">cloud-case-study</code> hosted on GitHub.</div>
+                        </div>
+                    </div>
+
+                    <div class="glass-card p-4 rounded-xl flex items-start gap-3">
+                        <span class="w-7 h-7 rounded-full bg-cyan-500 text-obsidian-950 font-bold flex items-center justify-center text-xs shrink-0 mt-0.5">3</span>
+                        <div>
+                            <div class="font-bold text-sm text-white dark:text-white light:text-slate-900">Upload Code & Push</div>
+                            <div class="text-xs text-slate-400">Commit <code class="font-mono text-cyan-300">index.html</code> to main branch using Git CLI.</div>
+                        </div>
+                    </div>
+
+                    <div class="glass-card p-4 rounded-xl flex items-start gap-3">
+                        <span class="w-7 h-7 rounded-full bg-cyan-500 text-obsidian-950 font-bold flex items-center justify-center text-xs shrink-0 mt-0.5">4</span>
+                        <div>
+                            <div class="font-bold text-sm text-white dark:text-white light:text-slate-900">Enable GitHub Pages</div>
+                            <div class="text-xs text-slate-400">Settings → Pages → Deploy from branch <code class="font-mono text-cyan-300">main / root</code>.</div>
+                        </div>
+                    </div>
+
+                    <div class="glass-card p-4 rounded-xl flex items-start gap-3">
+                        <span class="w-7 h-7 rounded-full bg-cyan-500 text-obsidian-950 font-bold flex items-center justify-center text-xs shrink-0 mt-0.5">5</span>
+                        <div>
+                            <div class="font-bold text-sm text-white dark:text-white light:text-slate-900">Open Live URL</div>
+                            <div class="text-xs text-slate-400">Access hosted web app live at <code class="font-mono text-cyan-300">https://username.github.io/cloud-case-study/</code>.</div>
+                        </div>
+                    </div>
+
+                    <div class="glass-card p-4 rounded-xl flex items-start gap-3">
+                        <span class="w-7 h-7 rounded-full bg-cyan-500 text-obsidian-950 font-bold flex items-center justify-center text-xs shrink-0 mt-0.5">6</span>
+                        <div>
+                            <div class="font-bold text-sm text-white dark:text-white light:text-slate-900">Deploy on AWS EC2</div>
+                            <div class="text-xs text-slate-400">Launch EC2 instance, authorize Security Group Port 80, install Nginx server, and copy index file.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="glass-card rounded-2xl overflow-hidden border-white/10">
+                <div class="bg-obsidian-900 dark:bg-obsidian-900 light:bg-slate-200 px-6 py-3 border-b border-white/10 dark:border-white/10 light:border-slate-300 flex items-center justify-between">
+                    <span class="font-mono text-xs text-slate-300 dark:text-slate-300 light:text-slate-800 flex items-center gap-2">
+                        <i data-lucide="file-code" class="w-4 h-4 text-cyan-400"></i> .github/workflows/deploy.yml
+                    </span>
+                    <button onclick="copyCode()" id="copy-btn" class="text-xs text-slate-400 hover:text-white flex items-center gap-1 px-3 py-1 rounded bg-white/5 border border-white/10 transition-all">
+                        <i data-lucide="copy" class="w-3.5 h-3.5"></i> Copy Script
+                    </button>
+                </div>
+                <pre class="p-6 font-mono text-xs text-slate-300 dark:text-slate-300 light:text-slate-800 overflow-x-auto bg-obsidian-950/90 dark:bg-obsidian-950/90 light:bg-slate-900 leading-relaxed"><code id="code-snippet"><span class="text-purple-400">name:</span> Cloud Deployment Pipeline (AWS/GCP)
+
+<span class="text-purple-400">on:</span>
+  <span class="text-purple-400">push:</span>
+    <span class="text-purple-400">branches:</span> [ <span class="text-emerald-400">"main"</span> ]
+
+<span class="text-purple-400">jobs:</span>
+  <span class="text-purple-400">deploy:</span>
+    <span class="text-purple-400">runs-on:</span> ubuntu-latest
+    <span class="text-purple-400">steps:</span>
+      - <span class="text-purple-400">name:</span> Checkout Repository
+        <span class="text-purple-400">uses:</span> actions/checkout@v3
+
+      - <span class="text-purple-400">name:</span> SSH Deploy to EC2
+        <span class="text-purple-400">uses:</span> appleboy/ssh-action@v0.1.10
+        <span class="text-purple-400">with:</span>
+          <span class="text-purple-400">host:</span> ${{ secrets.EC2_HOST_IP }}
+          <span class="text-purple-400">username:</span> ubuntu
+          <span class="text-purple-400">key:</span> ${{ secrets.EC2_SSH_KEY }}
+          <span class="text-purple-400">script:</span> |
+            cd /var/www/html
+            git pull origin main
+            sudo systemctl restart nginx</code></pre>
+            </div>
+        </section>
+
+        <section id="cost" class="space-y-8">
+            <div class="border-b border-white/10 dark:border-white/10 light:border-slate-200 pb-4">
+                <h2 class="text-3xl font-extrabold text-white dark:text-white light:text-slate-900 tracking-tight">
+                    Cloud Cost Estimator
+                </h2>
+                <p class="text-slate-400 dark:text-slate-400 light:text-slate-600 text-sm mt-1">
+                    Pay-per-use in action. Compute estimated monthly AWS Linux instance costs (us-east-1 rates).
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+                <div class="lg:col-span-6 glass-card p-6 rounded-2xl space-y-5">
+                    <div class="space-y-2">
+                        <label class="text-xs font-semibold text-slate-300 dark:text-slate-300 light:text-slate-700">Instance Type</label>
+                        <select id="instance-type" class="w-full glass-input px-3 py-2.5 rounded-xl text-xs focus:outline-none font-mono">
+                            <option value="0.0104" data-name="t3.micro">t3.micro (2 vCPU, 1 GB RAM) - $0.0104/hr</option>
+                            <option value="0.0208" data-name="t3.small">t3.small (2 vCPU, 2 GB RAM) - $0.0208/hr</option>
+                            <option value="0.0416" data-name="t3.medium">t3.medium (2 vCPU, 4 GB RAM) - $0.0416/hr</option>
+                            <option value="0.0960" data-name="c5.large">c5.large (2 vCPU, 4 GB RAM) - $0.0960/hr</option>
+                        </select>
+                    </div>
+
+                    <div class="space-y-2">
+                        <div class="flex justify-between text-xs font-semibold">
+                            <span class="text-slate-300 dark:text-slate-300 light:text-slate-700">Hours per day</span>
+                            <span id="hours-val" class="font-mono text-cyan-400">8 hrs</span>
+                        </div>
+                        <input type="range" id="hours-slider" min="1" max="24" value="8" class="w-full h-2 bg-obsidian-800 dark:bg-obsidian-800 light:bg-slate-200 rounded-lg appearance-none cursor-pointer accent-cyan-400">
+                    </div>
+
+                    <div class="space-y-2">
+                        <div class="flex justify-between text-xs font-semibold">
+                            <span class="text-slate-300 dark:text-slate-300 light:text-slate-700">Days per month</span>
+                            <span id="days-val" class="font-mono text-purple-400">30 days</span>
+                        </div>
+                        <input type="range" id="days-slider" min="1" max="30" value="30" class="w-full h-2 bg-obsidian-800 dark:bg-obsidian-800 light:bg-slate-200 rounded-lg appearance-none cursor-pointer accent-purple-400">
+                    </div>
+                </div>
+
+                <div class="lg:col-span-6 glass-card p-8 rounded-2xl text-center space-y-6">
+                    <div class="text-xs font-mono text-slate-400 uppercase tracking-wider">Estimated Monthly Cost</div>
+                    <div class="text-5xl font-extrabold text-cyan-400 font-mono" id="cost-total">
+                        $2.50
+                    </div>
+                    <div class="text-xs text-slate-400 font-mono" id="cost-details">
+                        240 running hours at $0.0104 per hour
+                    </div>
+
+                    <div class="space-y-2 text-xs font-mono text-left pt-4 border-t border-white/10">
+                        <div class="flex justify-between">
+                            <span class="text-slate-400">t3.micro (8 hrs/day)</span>
+                            <span class="text-cyan-400">$2.50</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-slate-400">t3.small (24 hrs/day)</span>
+                            <span class="text-purple-400">$14.98</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-slate-400">GitHub Pages (Static)</span>
+                            <span class="text-emerald-400 font-bold">$0.00 Free</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="compare" class="space-y-8">
+            <div class="border-b border-white/10 dark:border-white/10 light:border-slate-200 pb-4">
+                <h2 class="text-3xl font-extrabold text-white dark:text-white light:text-slate-900 tracking-tight">
+                    Hosting Options Compared
+                </h2>
+                <p class="text-slate-400 dark:text-slate-400 light:text-slate-600 text-sm mt-1">
+                    Choosing the right cloud service for your target application.
+                </p>
+            </div>
+
+            <div class="glass-card rounded-2xl overflow-x-auto border-white/10">
+                <table class="w-full text-left border-collapse text-xs">
+                    <thead>
+                        <tr class="border-b border-white/10 dark:border-white/10 light:border-slate-200 bg-obsidian-900/50 dark:bg-obsidian-900/50 light:bg-slate-100 font-mono text-cyan-400">
+                            <th class="p-4 font-bold">Feature</th>
+                            <th class="p-4 font-bold">GitHub Pages</th>
+                            <th class="p-4 font-bold">AWS EC2 + Nginx</th>
+                            <th class="p-4 font-bold">AWS S3 Static Web</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-white/5 dark:divide-white/5 light:divide-slate-200 text-slate-300 dark:text-slate-300 light:text-slate-700">
+                        <tr>
+                            <td class="p-4 font-bold text-white dark:text-white light:text-slate-900">Service Model</td>
+                            <td class="p-4">PaaS (Static)</td>
+                            <td class="p-4">IaaS</td>
+                            <td class="p-4">Storage Hosting</td>
+                        </tr>
+                        <tr>
+                            <td class="p-4 font-bold text-white dark:text-white light:text-slate-900">Cost</td>
+                            <td class="p-4 text-emerald-400 font-bold">$0.00 / Free</td>
+                            <td class="p-4 text-amber-400 font-bold">$3 – $15+ / mo</td>
+                            <td class="p-4 text-cyan-400 font-bold">&lt;$1.00 / mo</td>
+                        </tr>
+                        <tr>
+                            <td class="p-4 font-bold text-white dark:text-white light:text-slate-900">Custom Backend Code</td>
+                            <td class="p-4 text-rose-400">No (Static only)</td>
+                            <td class="p-4 text-emerald-400 font-bold">Yes (Node, Python, PHP)</td>
+                            <td class="p-4 text-rose-400">No (Static only)</td>
+                        </tr>
+                        <tr>
+                            <td class="p-4 font-bold text-white dark:text-white light:text-slate-900">Setup Complexity</td>
+                            <td class="p-4 text-emerald-400">5 Minutes (Git Push)</td>
+                            <td class="p-4 text-amber-400">Moderate (SSH, Nginx, Security Group)</td>
+                            <td class="p-4 text-cyan-400">Easy (S3 Bucket Policies)</td>
+                        </tr>
+                        <tr>
+                            <td class="p-4 font-bold text-white dark:text-white light:text-slate-900">SSL Certificate</td>
+                            <td class="p-4 text-emerald-400">Automatic Free SSL</td>
+                            <td class="p-4 text-amber-400">Certbot Let's Encrypt</td>
+                            <td class="p-4 text-cyan-400">AWS ACM + CloudFront</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <footer class="border-t border-white/10 dark:border-white/10 light:border-slate-200 pt-10 pb-16 text-center space-y-3 text-xs text-slate-500">
+            <div class="flex justify-center items-center gap-6 text-slate-400">
+                <a href="#hero" class="hover:text-cyan-400 transition-colors">Top</a>
+                <a href="#models" class="hover:text-cyan-400 transition-colors">Models</a>
+                <a href="#cloudsim" class="hover:text-cyan-400 transition-colors">CloudSim</a>
+                <a href="#vm-transfer" class="hover:text-cyan-400 transition-colors">VM Transfer</a>
+                <a href="#cost" class="hover:text-cyan-400 transition-colors">Cost Estimator</a>
+            </div>
+            <p>© 2026 Cloud Computing Case Study | Kanishka</p>
+        </footer>
+
+    </main>
+
+    <script>
+        lucide.createIcons();
+
+        function toggleTheme() {
+            const html = document.documentElement;
+            const themeText = document.getElementById('theme-text');
+            const themeIcon = document.getElementById('theme-icon');
+
+            if (html.classList.contains('dark')) {
+                html.classList.remove('dark');
+                html.classList.add('light');
+                themeText.innerText = "Light";
+                themeIcon.innerHTML = `<i data-lucide="sun" class="w-4 h-4 text-amber-500"></i>`;
+            } else {
+                html.classList.remove('light');
+                html.classList.add('dark');
+                themeText.innerText = "Dark";
+                themeIcon.innerHTML = `<i data-lucide="moon" class="w-4 h-4 text-purple-400"></i>`;
+            }
+            lucide.createIcons();
+        }
+
+        const dcSlider = document.getElementById('dc-slider');
+        const vmSlider = document.getElementById('vm-slider');
+        const cloudletSlider = document.getElementById('cloudlet-slider');
+
+        dcSlider.addEventListener('input', (e) => document.getElementById('dc-val').innerText = `${e.target.value} Regions`);
+        vmSlider.addEventListener('input', (e) => document.getElementById('vm-val').innerText = `${e.target.value} VMs`);
+        cloudletSlider.addEventListener('input', (e) => document.getElementById('cloudlet-val').innerText = `${e.target.value} Cloudlets`);
+
+        document.getElementById('run-sim-btn').addEventListener('click', () => {
+            const terminal = document.getElementById('terminal-logs');
+            const status = document.getElementById('sim-status-text');
+            status.innerText = "Simulating...";
+            status.className = "text-xs font-mono text-amber-400 animate-pulse";
+
+            const timeStamp = new Date().toLocaleTimeString();
+            terminal.innerHTML += `<div class="text-cyan-400">[${timeStamp}] --- Executing CloudSim Job ---</div>`;
+            terminal.scrollTop = terminal.scrollHeight;
+
+            setTimeout(() => {
+                terminal.innerHTML += `<div class="text-emerald-400">[Completed] Workload processed cleanly across provisioned VM hosts.</div>`;
+                terminal.scrollTop = terminal.scrollHeight;
+                status.innerText = "Finished (Success)";
+                status.className = "text-xs font-mono text-emerald-400";
+            }, 1200);
+        });
+
+        function switchVMTab(tabName) {
+            const oracleTab = document.getElementById('tab-oracle');
+            const awsTab = document.getElementById('tab-aws');
+            const btnOracle = document.getElementById('btn-oracle-mode');
+            const btnAws = document.getElementById('btn-aws-mode');
+
+            if (tabName === 'oracle') {
+                oracleTab.classList.remove('hidden');
+                awsTab.classList.add('hidden');
+                btnOracle.className = "px-4 py-2 rounded-lg text-xs font-bold transition-all bg-cyan-500 text-obsidian-950 shadow-md";
+                btnAws.className = "px-4 py-2 rounded-lg text-xs font-bold text-slate-400 hover:text-white transition-all";
+            } else {
+                awsTab.classList.remove('hidden');
+                oracleTab.classList.add('hidden');
+                btnAws.className = "px-4 py-2 rounded-lg text-xs font-bold transition-all bg-purple-500 text-obsidian-950 shadow-md";
+                btnOracle.className = "px-4 py-2 rounded-lg text-xs font-bold text-slate-400 hover:text-white transition-all";
+            }
+        }
+
+        const instanceSelect = document.getElementById('instance-type');
+        const hoursSlider = document.getElementById('hours-slider');
+        const daysSlider = document.getElementById('days-slider');
+        const costTotal = document.getElementById('cost-total');
+        const costDetails = document.getElementById('cost-details');
+
+        function updateCost() {
+            const rate = parseFloat(instanceSelect.value);
+            const hours = parseInt(hoursSlider.value);
+            const days = parseInt(daysSlider.value);
+
+            document.getElementById('hours-val').innerText = `${hours} hrs`;
+            document.getElementById('days-val').innerText = `${days} days`;
+
+            const totalHours = hours * days;
+            const totalCost = (totalHours * rate).toFixed(2);
+
+            costTotal.innerText = `$${totalCost}`;
+            costDetails.innerText = `${totalHours} running hours at $${rate} per hour`;
+        }
+
+        instanceSelect.addEventListener('change', updateCost);
+        hoursSlider.addEventListener('input', updateCost);
+        daysSlider.addEventListener('input', updateCost);
+
+        function copyCode() {
+            navigator.clipboard.writeText(document.getElementById('code-snippet').innerText).then(() => {
+                const btn = document.getElementById('copy-btn');
+                btn.innerHTML = `<i data-lucide="check" class="w-3.5 h-3.5 text-emerald-400"></i> Copied!`;
+                lucide.createIcons();
+                setTimeout(() => {
+                    btn.innerHTML = `<i data-lucide="copy" class="w-3.5 h-3.5"></i> Copy Script`;
+                    lucide.createIcons();
+                }, 2000);
+            });
+        }
+    </script>
+</body>
+</html>
